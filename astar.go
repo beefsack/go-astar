@@ -11,9 +11,29 @@ type openPather struct {
 	parent *openPather
 }
 
+type pathQueue struct {
+	Values []*openPather
+}
+
+func (q *pathQueue) Add(p *openPather) {
+
+}
+
+func (q *pathQueue) Remove(p *openPather) {
+}
+
+func (q *pathQueue) Pop() *openPather {
+	return q.Values[0]
+}
+
+func (q *pathQueue) Len() int {
+	return len(q.Values)
+}
+
 func Path(from, to Pather) []Pather {
-	open := []openPather{
-		{
+	openQueue := openQueue{}
+	openIndex := map[string]*openPather{
+		from.LocationIdentifier(): {
 			pather: from,
 			rank:   0,
 			parent: nil,
