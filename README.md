@@ -12,7 +12,7 @@ A fantastic overview of A\* can be found at [Amit Patel's Stanford website](http
 Examples
 --------
 
-The following crude examples were taken directly from the automated tests.  Please see `path\_test.go` for more examples.
+The following crude examples were taken directly from the automated tests.  Please see `path_test.go` for more examples.
 
 ### Key
 
@@ -129,4 +129,5 @@ path, distance := astar.Path(t1, t2)
 if path == nil {
 	log.Println("Could not find path")
 }
+// path is a slice of Pather objects which you can cast back to *Tile.
 ```
