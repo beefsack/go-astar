@@ -1,8 +1,8 @@
 package astar
 
 type Pather interface {
-	Neighbors() []Pather
-	Cost(to Pather) float64
+	PathNeighbors() []Pather
+	PathCost(to Pather) float64
 }
 
 type node struct {
@@ -48,8 +48,8 @@ func Path(from, to Pather) ([]Pather, float64) {
 		}
 		current.open = false
 		current.closed = true
-		for _, neighbor := range current.pather.Neighbors() {
-			cost := current.cost + current.pather.Cost(neighbor)
+		for _, neighbor := range current.pather.PathNeighbors() {
+			cost := current.cost + current.pather.PathCost(neighbor)
 			neighborNode := nm.get(neighbor)
 			if neighbor == to {
 				// Goal!
@@ -69,7 +69,7 @@ func Path(from, to Pather) ([]Pather, float64) {
 			if !neighborNode.open && !neighborNode.closed {
 				neighborNode.cost = cost
 				neighborNode.open = true
-				neighborNode.rank = cost + neighbor.Cost(to)
+				neighborNode.rank = cost + neighbor.PathCost(to)
 				neighborNode.parent = current
 			}
 		}

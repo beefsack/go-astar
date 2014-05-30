@@ -48,7 +48,7 @@ type Tile struct {
 	W    World
 }
 
-func (t *Tile) Neighbors() []Pather {
+func (t *Tile) PathNeighbors() []Pather {
 	neighbors := []Pather{}
 	for _, offset := range [][]int{
 		{-1, 0},
@@ -64,7 +64,7 @@ func (t *Tile) Neighbors() []Pather {
 	return neighbors
 }
 
-func (t *Tile) Cost(to Pather) float64 {
+func (t *Tile) PathCost(to Pather) float64 {
 	toT := to.(*Tile)
 	// If we're a neighbor, give exact cost, otherwise estimate
 	absX := toT.X - t.X
