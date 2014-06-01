@@ -1,5 +1,7 @@
 package astar
 
+import "container/heap"
+
 // astar is an A* pathfinding implementation.
 
 // Pather is an interface which allows A* searching on arbitrary objects which
@@ -23,6 +25,7 @@ type node struct {
 	parent *node
 	open   bool
 	closed bool
+	index  int
 }
 
 // nodeMap is a collection of nodes keyed by Pather nodes for quick reference.
@@ -40,34 +43,22 @@ func (nm nodeMap) get(p Pather) *node {
 	return n
 }
 
-// lowestOpen gets the lowest ranked open node in the node map.
-//
-// The storage and / or searching for the lowest ranked open node needs to be
-// optimised.
-func (nm nodeMap) lowestOpen() (n *node, found bool) {
-	for _, i := range nm {
-		if i.open && (n == nil || i.rank < n.rank) {
-			n = i
-			found = true
-		}
-	}
-	return
-}
-
 // Path calculates a short path and the distance between the two Pather nodes.
 //
 // If no path is found, it will return nil.
 func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 	nm := nodeMap{}
+	nq := &priorityQueue{}
+	heap.Init(nq)
 	fromNode := nm.get(from)
 	fromNode.open = true
+	heap.Push(nq, fromNode)
 	for {
-		var current *node
-		current, found = nm.lowestOpen()
-		if !found {
+		if nq.Len() == 0 {
 			// There's no path, return nil.
 			return
 		}
+		current := heap.Pop(nq).(*node)
 		current.open = false
 		current.closed = true
 		for _, neighbor := range current.pather.PathNeighbors() {
@@ -85,6 +76,9 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 				return p, cost, true
 			}
 			if cost < neighborNode.cost {
+				if neighborNode.open {
+					heap.Remove(nq, neighborNode.index)
+				}
 				neighborNode.open = false
 				neighborNode.closed = false
 			}
@@ -93,6 +87,7 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 				neighborNode.open = true
 				neighborNode.rank = cost + neighbor.PathEstimatedCost(to)
 				neighborNode.parent = current
+				heap.Push(nq, neighborNode)
 			}
 		}
 	}
