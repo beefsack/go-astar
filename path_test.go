@@ -12,16 +12,16 @@ import "testing"
 func testPath(worldInput string, t *testing.T, expectedDist float64) {
 	world := ParseWorld(worldInput)
 	t.Logf("Input world\n%s", world.RenderPath([]Pather{}))
-	p, dist := Path(world.From(), world.To())
-	if p == nil {
+	p, dist, found := Path(world.From(), world.To())
+	if !found {
 		t.Log("Could not find a path")
 	} else {
 		t.Logf("Resulting path\n%s", world.RenderPath(p))
 	}
-	if p == nil && expectedDist >= 0 {
+	if !found && expectedDist >= 0 {
 		t.Fatal("Could not find a path")
 	}
-	if p != nil && dist != expectedDist {
+	if found && dist != expectedDist {
 		t.Fatalf("Expected dist to be %v but got %v", expectedDist, dist)
 	}
 }

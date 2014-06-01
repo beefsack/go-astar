@@ -8,9 +8,11 @@ type Pather interface {
 	// PathNeighbors returns the direct neighboring nodes of this node which
 	// can be pathed to.
 	PathNeighbors() []Pather
-	// PathCost calculated the exact movement cost to neighbor nodes, and
-	// approximates the movement cost to any non-adjacent nodes.
-	PathCost(to Pather) float64
+	// PathNeighbourCost calculates the exact movement cost to neighbor nodes.
+	PathNeighborCost(to Pather) float64
+	// PathEstimatedCost is a heuristic method for estimating movement costs
+	// between non-adjacent nodes.
+	PathEstimatedCost(to Pather) float64
 }
 
 // node is a wrapper to store A* data for a Pather node.
@@ -42,10 +44,11 @@ func (nm nodeMap) get(p Pather) *node {
 //
 // The storage and / or searching for the lowest ranked open node needs to be
 // optimised.
-func (nm nodeMap) lowestOpen() (n *node) {
+func (nm nodeMap) lowestOpen() (n *node, found bool) {
 	for _, i := range nm {
 		if i.open && (n == nil || i.rank < n.rank) {
 			n = i
+			found = true
 		}
 	}
 	return
@@ -54,22 +57,21 @@ func (nm nodeMap) lowestOpen() (n *node) {
 // Path calculates a short path and the distance between the two Pather nodes.
 //
 // If no path is found, it will return nil.
-//
-// See:
-func Path(from, to Pather) ([]Pather, float64) {
+func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 	nm := nodeMap{}
 	fromNode := nm.get(from)
 	fromNode.open = true
 	for {
-		current := nm.lowestOpen()
-		if current == nil {
+		var current *node
+		current, found = nm.lowestOpen()
+		if !found {
 			// There's no path, return nil.
-			return nil, 0
+			return
 		}
 		current.open = false
 		current.closed = true
 		for _, neighbor := range current.pather.PathNeighbors() {
-			cost := current.cost + current.pather.PathCost(neighbor)
+			cost := current.cost + current.pather.PathNeighborCost(neighbor)
 			neighborNode := nm.get(neighbor)
 			if neighbor == to {
 				// Found a path to the goal.
@@ -80,7 +82,7 @@ func Path(from, to Pather) ([]Pather, float64) {
 					p = append(p, curr.pather)
 					curr = curr.parent
 				}
-				return p, cost
+				return p, cost, true
 			}
 			if cost < neighborNode.cost {
 				neighborNode.open = false
@@ -89,7 +91,7 @@ func Path(from, to Pather) ([]Pather, float64) {
 			if !neighborNode.open && !neighborNode.closed {
 				neighborNode.cost = cost
 				neighborNode.open = true
-				neighborNode.rank = cost + neighbor.PathCost(to)
+				neighborNode.rank = cost + neighbor.PathEstimatedCost(to)
 				neighborNode.parent = current
 			}
 		}

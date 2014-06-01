@@ -86,12 +86,16 @@ func (t *Tile) PathNeighbors() []Pather {
 	return neighbors
 }
 
-// PathCost returns the movement cost of the tile for direct neighbors, or
-// approximates the cost for non-adjacent nodes by simply calculating the
-// Manhattan distance.
-func (t *Tile) PathCost(to Pather) float64 {
+// PathNeighborCost returns the movement cost of the directly neighboring tile.
+func (t *Tile) PathNeighborCost(to Pather) float64 {
 	toT := to.(*Tile)
-	// If we're a neighbor, give exact cost, otherwise estimate
+	return KindCosts[toT.Kind]
+}
+
+// PathEstimatedCost uses Manhattan distance to estimate orthogonal distance
+// between non-adjacent nodes.
+func (t *Tile) PathEstimatedCost(to Pather) float64 {
+	toT := to.(*Tile)
 	absX := toT.X - t.X
 	if absX < 0 {
 		absX = -absX
@@ -99,9 +103,6 @@ func (t *Tile) PathCost(to Pather) float64 {
 	absY := toT.Y - t.Y
 	if absY < 0 {
 		absY = -absY
-	}
-	if absX+absY == 1 {
-		return KindCosts[toT.Kind]
 	}
 	return float64(absX + absY)
 }

@@ -99,7 +99,9 @@ An example implementation is done for the tests in `path_test.go` for the Tile t
 
 The `PathNeighbours` method should return a slice of the direct neighbours.
 
-The `PathCost` method should calculate an exact movement cost for direct neighbours, and approximate a distance anything not directly adjacent.
+The `PathNeighbourCost` method should calculate an exact movement cost for direct neighbours.
+
+The `PathEstimatedCost` is a heuristic method for estimating the distance between arbitrary tiles.  The examples in the test files use [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) to estimate orthogonal distance between tiles.
 
 ```go
 type Tile struct{}
@@ -113,11 +115,12 @@ func (t *Tile) PathNeighbours() []astar.Pather {
 	}
 }
 
-func (t *Tile) PathCost(to astar.Pather) float64 {
-	if t.IsNeighbour(to) {
-		return to.MovementCost
-	}
-	return t.ApproximateCost(to)
+func (t *Tile) PathNeighbourCost(to astar.Pather) float64 {
+	return to.MovementCost
+}
+
+func (t *Tile) PathEstimatedCost(to astar.Pather) float64 {
+	return t.ManhattanDistance(to)
 }
 ```
 
@@ -125,8 +128,8 @@ func (t *Tile) PathCost(to astar.Pather) float64 {
 
 ```go
 // t1 and t2 are *Tile objects from inside the world.
-path, distance := astar.Path(t1, t2)
-if path == nil {
+path, distance, found := astar.Path(t1, t2)
+if !found {
 	log.Println("Could not find path")
 }
 // path is a slice of Pather objects which you can cast back to *Tile.
