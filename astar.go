@@ -45,7 +45,7 @@ func (nm nodeMap) get(p Pather) *node {
 
 // Path calculates a short path and the distance between the two Pather nodes.
 //
-// If no path is found, it will return nil.
+// If no path is found, found will be false.
 func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 	nm := nodeMap{}
 	nq := &priorityQueue{}
@@ -55,7 +55,7 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 	heap.Push(nq, fromNode)
 	for {
 		if nq.Len() == 0 {
-			// There's no path, return nil.
+			// There's no path, return found false.
 			return
 		}
 		current := heap.Pop(nq).(*node)

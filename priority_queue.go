@@ -1,8 +1,7 @@
 package astar
 
-// Priority queue for nodes.
-
-// A priorityQueue implements heap.Interface and holds Nodes.
+// A priorityQueue implements heap.Interface and holds Nodes.  The
+// priorityQueue is used to track open nodes by rank.
 type priorityQueue []*node
 
 func (pq priorityQueue) Len() int {
