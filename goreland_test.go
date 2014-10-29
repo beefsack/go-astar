@@ -48,12 +48,9 @@ S-E is either:
    "enormous amounts of material"!, cost: 10000.
    Solver should avoid the plugged tube.
    Expect solution Start,Middle,End  Total cost: 2.0
-
 */
-func TestGraphPath_ShortDiagonal(t *testing.T) {
 
-	diagonal_cost := 1.9
-	expectedDist := 1.9
+func createGorelandGraphPath_Diagonal(t *testing.T, diagonal_cost float64, expectedDist float64) {
 
 	world := new(Goreland)
 
@@ -80,38 +77,11 @@ func TestGraphPath_ShortDiagonal(t *testing.T) {
 	if found && dist != expectedDist {
 		t.Fatalf("Expected dist to be %v but got %v", expectedDist, dist)
 	}
-
 }
 
-func TestGraphPath_LongDiagonal(t *testing.T) {
-
-	diagonal_cost := 100000.0
-	expectedDist := 2.0
-
-	world := new(Goreland)
-
-	tr_start := AddTruck(0, 0, "Start")
-	tr_mid := AddTruck(0, 1, "Middle")
-	tr_end := AddTruck(1, 1, "End")
-
-	AddTube(tr_start, tr_end, diagonal_cost)
-	AddTube(tr_start, tr_mid, 1)
-	AddTube(tr_mid, tr_end, 1)
-
-	t.Logf("Goreland.  Diagonal cost: %v\n\n", diagonal_cost)
-
-	p, dist, found := Path(tr_start, tr_end)
-
-	if !found {
-		t.Log("Could not find a path")
-	} else {
-		t.Logf("Resulting path\n%s", world.RenderPath(p))
-	}
-	if !found && expectedDist >= 0 {
-		t.Fatal("Could not find a path")
-	}
-	if found && dist != expectedDist {
-		t.Fatalf("Expected dist to be %v but got %v", expectedDist, dist)
-	}
-
+func TestGraphPaths_ShortDiagonal(t *testing.T) {
+	createGorelandGraphPath_Diagonal(t, 1.9, 1.9)
+}
+func TestGraphPaths_LongDiagonal(t *testing.T) {
+	createGorelandGraphPath_Diagonal(t, 10000, 2.0)
 }

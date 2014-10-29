@@ -4,10 +4,6 @@ package astar
 // the sake of testing.  This functionality forms the back end for
 // goreland_test.go, and serves as an example for how to use A* for a graph.
 
-import (
-//"fmt"
-)
-
 /*
 The Magical World of Goreland, is where Ted Stevens and Al Gore are from.
 
@@ -23,7 +19,7 @@ The key differences between this example and the Tile world:
    modelled as Tubes.
 
 The key similarities between this example and the Tile world:
-1) They both use Manhattan distance
+1) They both use Manhattan distance as their heuristic
 2) Both implement Pather
 */
 
@@ -89,7 +85,7 @@ func (t *Truck) PathEstimatedCost(to Pather) float64 {
 	return r
 }
 
-// RenderPath renders a path on top of a Goreland.
+// RenderPath renders a path on top of a Goreland world.
 func (w Goreland) RenderPath(path []Pather) string {
 
 	s := ""
