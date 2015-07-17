@@ -4,24 +4,23 @@ package astar
 // the sake of testing.  This functionality forms the back end for
 // goreland_test.go, and serves as an example for how to use A* for a graph.
 
-/*
-The Magical World of Goreland, is where Ted Stevens and Al Gore are from.
 
-It is composed of Big Trucks, and a Series of Tubes!
-
-Ok, it is basically just a Graph.
-Nodes are called "Trucks" and they have X, Y coordinates
-Edges are called "Tubes", they connect Trucks, and they have a cost
-
-The key differences between this example and the Tile world:
-1) There is no grid.  Trucks have arbitrary coordinates.
-2) Edges are not implied by the grid positions.  Instead edges are explicitly
-   modelled as Tubes.
-
-The key similarities between this example and the Tile world:
-1) They both use Manhattan distance as their heuristic
-2) Both implement Pather
-*/
+// The Magical World of Goreland, is where Ted Stevens and Al Gore are from.
+// 
+// It is composed of Big Trucks, and a Series of Tubes!
+// 
+// Ok, it is basically just a Graph.
+// Nodes are called "Trucks" and they have X, Y coordinates
+// Edges are called "Tubes", they connect Trucks, and they have a cost
+// 
+// The key differences between this example and the Tile world:
+// 1) There is no grid.  Trucks have arbitrary coordinates.
+// 2) Edges are not implied by the grid positions.  Instead edges are explicitly
+//    modelled as Tubes.
+// 
+// The key similarities between this example and the Tile world:
+// 1) They both use Manhattan distance as their heuristic
+// 2) Both implement Pather
 
 type Goreland struct {
 	//	trucks map[int]*Truck		// not needed really
