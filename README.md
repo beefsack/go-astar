@@ -134,3 +134,8 @@ if !found {
 }
 // path is a slice of Pather objects which you can cast back to *Tile.
 ```
+
+Authors
+-------
+
+Michael Alexander <beefsack@gmail.com>
