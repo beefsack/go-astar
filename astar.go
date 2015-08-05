@@ -61,20 +61,22 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 		current := heap.Pop(nq).(*node)
 		current.open = false
 		current.closed = true
+
+		if current == nm.get(to) {
+			// Found a path to the goal.
+			p := []Pather{}
+			curr := current
+			for curr != nil {
+				p = append(p, curr.pather)
+				curr = curr.parent
+			}
+			return p, current.cost, true
+		}
+
+
 		for _, neighbor := range current.pather.PathNeighbors() {
 			cost := current.cost + current.pather.PathNeighborCost(neighbor)
 			neighborNode := nm.get(neighbor)
-			if neighbor == to {
-				// Found a path to the goal.
-				p := []Pather{}
-				curr := neighborNode
-				curr.parent = current
-				for curr != nil {
-					p = append(p, curr.pather)
-					curr = curr.parent
-				}
-				return p, cost, true
-			}
 			if cost < neighborNode.cost {
 				if neighborNode.open {
 					heap.Remove(nq, neighborNode.index)
