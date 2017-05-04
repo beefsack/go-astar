@@ -94,3 +94,43 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 		}
 	}
 }
+
+func Actionableange(from Pather,cost float64) map[Pather]int {
+	nm := nodeMap{}
+	fromNode := nm.get(from)
+	nq := &priorityQueue{}
+	heap.Init(nq)
+	heap.Push(nq,fromNode)
+	path:=make(map[Pather]int)
+	for {
+		if nq.Len()==0{
+			return path
+		}
+		current:=heap.Pop(nq).(*node)
+		for _,neighbor:=range current.pather.PathNeighbors() {
+			if current.cost<=cost{
+				path[current.pather]++
+			}
+			neighborNode := nm.get(neighbor)
+			if path[neighbor]>0{
+				continue
+			}
+			if current.parent!=nil{
+				neighborNode.cost=current.cost+current.pather.PathNeighborCost(neighbor)
+			}else {
+				neighborNode.cost=current.pather.PathNeighborCost(neighbor)
+			}
+			if neighborNode.cost>cost{
+				continue
+			}
+			if neighborNode.cost<cost{
+				neighborNode.parent=current
+				heap.Push(nq,neighborNode)
+			}
+			if neighborNode.cost==cost{
+				path[neighborNode.pather]++
+			}
+		}
+	}
+	return path
+}
