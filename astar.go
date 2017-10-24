@@ -10,7 +10,7 @@ type Pather interface {
 	// PathNeighbors returns the direct neighboring nodes of this node which
 	// can be pathed to.
 	PathNeighbors() []Pather
-	// PathNeighbourCost calculates the exact movement cost to neighbor nodes.
+	// PathNeighborCost calculates the exact movement cost to neighbor nodes.
 	PathNeighborCost(to Pather) float64
 	// PathEstimatedCost is a heuristic method for estimating movement costs
 	// between non-adjacent nodes.
@@ -72,7 +72,6 @@ func Path(from, to Pather) (path []Pather, distance float64, found bool) {
 			}
 			return p, current.cost, true
 		}
-
 
 		for _, neighbor := range current.pather.PathNeighbors() {
 			cost := current.cost + current.pather.PathNeighborCost(neighbor)

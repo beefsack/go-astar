@@ -97,16 +97,16 @@ import "github.com/beefsack/go-astar"
 
 An example implementation is done for the tests in `path_test.go` for the Tile type.
 
-The `PathNeighbours` method should return a slice of the direct neighbours.
+The `PathNeighbors` method should return a slice of the direct neighbors.
 
-The `PathNeighbourCost` method should calculate an exact movement cost for direct neighbours.
+The `PathNeighborCost` method should calculate an exact movement cost for direct neighbors.
 
 The `PathEstimatedCost` is a heuristic method for estimating the distance between arbitrary tiles.  The examples in the test files use [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) to estimate orthogonal distance between tiles.
 
 ```go
 type Tile struct{}
 
-func (t *Tile) PathNeighbours() []astar.Pather {
+func (t *Tile) PathNeighbors() []astar.Pather {
 	return []astar.Pather{
 		t.Up(),
 		t.Right(),
@@ -115,7 +115,7 @@ func (t *Tile) PathNeighbours() []astar.Pather {
 	}
 }
 
-func (t *Tile) PathNeighbourCost(to astar.Pather) float64 {
+func (t *Tile) PathNeighborCost(to astar.Pather) float64 {
 	return to.MovementCost
 }
 
