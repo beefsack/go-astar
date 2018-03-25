@@ -163,7 +163,7 @@ func PathBidir(from Pather, to Pather) (path []Pather, distance float64, found b
 			//fmt.Println("RES:", fwd_node_in_rev_map.closed, fwd_node_in_rev_map.open, fwd_pather) //, rev_pather)
 
 			rp := []Pather{}
-			curr := rev_curnode
+			curr := fwd_node_in_rev_map
 			for curr != nil {
 				rp = append(rp, curr.pather)
 				curr = curr.parent
