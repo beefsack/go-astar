@@ -2,7 +2,7 @@ package astar
 
 import (
 	"container/heap"
-	"fmt"
+	//"fmt"
 )
 
 // astar is an A* pathfinding implementation.
@@ -76,6 +76,54 @@ func Path(from Pather, to Pather) (path []Pather, distance float64, found bool) 
 	fwd_nodemap := nodeMap{}
 	fwd_nq := &priorityQueue{} // fwd priq
 
+	heap.Init(fwd_nq)
+
+	fromNode := fwd_nodemap.get_node_from_pather(from)
+	fromNode.open = true
+
+	heap.Push(fwd_nq, fromNode)
+
+	for {
+		if fwd_nq.Len() == 0 {
+			// There's no path, return found false.
+			return
+		}
+
+		fwd_curnode := heap.Pop(fwd_nq).(*node)
+		fwd_curnode.open = false
+		fwd_curnode.closed = true
+		fwd_pather := fwd_curnode.pather
+		//fmt.Println(fwd_curnode)
+
+		if fwd_pather == to {
+			// Found a path to the goal.
+			//fmt.Println("RES:", fwd_pather)
+
+			p := []Pather{}
+
+			curr := fwd_curnode.parent
+			for curr != nil {
+				p = append(p, curr.pather)
+				//fmt.Println(curr.pather)
+				curr = curr.parent
+			}
+
+			return p, fwd_curnode.parent.cost, true
+		}
+
+		expand(fwd_nodemap, fwd_nq, fwd_curnode, to)
+
+	}
+}
+
+
+// Path calculates a short path and the distance between the two Pather nodes.
+//
+// If no path is found, found will be false.
+func PathBidir(from Pather, to Pather) (path []Pather, distance float64, found bool) {
+	fwd_nodemap := nodeMap{}
+	fwd_nq := &priorityQueue{} // fwd priq
+
 	rev_nodemap := nodeMap{}
 	rev_nq := &priorityQueue{} // rev priq
 
@@ -101,18 +149,18 @@ func Path(from Pather, to Pather) (path []Pather, distance float64, found bool) 
 		fwd_curnode.open = false
 		fwd_curnode.closed = true
 		fwd_pather := fwd_curnode.pather
-		fmt.Println(fwd_curnode)
+		//fmt.Println(fwd_curnode)
 
 		rev_curnode := heap.Pop(rev_nq).(*node)
 		rev_curnode.open = false
 		rev_curnode.closed = true
 		//rev_pather := rev_curnode.pather
-		fmt.Println(rev_curnode)
+		//fmt.Println(rev_curnode)
 
 		fwd_node_in_rev_map := rev_nodemap.get_node_from_pather(fwd_pather)
 		if fwd_node_in_rev_map.closed || fwd_node_in_rev_map.open || fwd_pather == to {
 			// Found a path to the goal.
-			fmt.Println("RES:", fwd_node_in_rev_map.closed, fwd_node_in_rev_map.open, fwd_pather) //, rev_pather)
+			//fmt.Println("RES:", fwd_node_in_rev_map.closed, fwd_node_in_rev_map.open, fwd_pather) //, rev_pather)
 
 			rp := []Pather{}
 			curr := rev_curnode
@@ -125,14 +173,14 @@ func Path(from Pather, to Pather) (path []Pather, distance float64, found bool) 
 			p := []Pather{}
 			for i := len(rp) - 1; i >= 0; i = i - 1 {
 				p = append(p, rp[i])
-				fmt.Println(rp[i])
+				//fmt.Println(rp[i])
 			}
-			fmt.Println("revdone")
+			//fmt.Println("revdone")
 
 			curr = fwd_curnode.parent
 			for curr != nil {
 				p = append(p, curr.pather)
-				fmt.Println(curr.pather)
+				//fmt.Println(curr.pather)
 				curr = curr.parent
 			}
 
