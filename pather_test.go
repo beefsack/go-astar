@@ -163,6 +163,7 @@ func (w World) RenderPath(path []Pather) string {
 	for _, p := range path {
 		pT := p.(*Tile)
 		pathLocs[fmt.Sprintf("%d,%d", pT.X, pT.Y)] = true
+		fmt.Println(pT.X, pT.Y)
 	}
 	rows := make([]string, height)
 	for x := 0; x < width; x++ {
