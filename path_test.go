@@ -28,27 +28,7 @@ func testPath(worldInput string, t *testing.T, expectedDist float64) {
 
 // TestStraightLine checks that having no obstacles results in a straight line
 // path.
-func TestStraightLineMini1(t *testing.T) {
-	testPath(`
-..MM.
-.F.T.
-.MMM.
-`, t, 2)
-}
-
-// TestStraightLine checks that having no obstacles results in a straight line
-// path.
-func TestStraightLineMini2(t *testing.T) {
-	testPath(`
-..MM..
-.F..T.
-.MMM..
-`, t, 3)
-}
-
-// TestStraightLine checks that having no obstacles results in a straight line
-// path.
-func TestStraightLineLarger(t *testing.T) {
+func TestStraightLine(t *testing.T) {
 	testPath(`
 .....~......
 .....MM.....
