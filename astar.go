@@ -2,7 +2,6 @@ package astar
 
 import (
 	"container/heap"
-	//"fmt"
 )
 
 // astar is an A* pathfinding implementation.
