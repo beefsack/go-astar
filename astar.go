@@ -101,14 +101,14 @@ func Path(from Pather, to Pather) (path []Pather, distance float64, found bool) 
 
 			p := []Pather{}
 
-			curr := fwd_curnode.parent
+			curr := fwd_curnode
 			for curr != nil {
 				p = append(p, curr.pather)
 				//fmt.Println(curr.pather)
 				curr = curr.parent
 			}
 
-			return p, fwd_curnode.parent.cost, true
+			return p, fwd_curnode.cost, true
 		}
 
 		expand(fwd_nodemap, fwd_nq, fwd_curnode, to)
@@ -184,7 +184,7 @@ func PathBidir(from Pather, to Pather) (path []Pather, distance float64, found b
 				curr = curr.parent
 			}
 
-			return p, fwd_curnode.parent.cost + rev_curnode.cost, true
+			return p, fwd_curnode.parent.cost + fwd_node_in_rev_map.cost, true
 		}
 
 		expand(fwd_nodemap, fwd_nq, fwd_curnode, to)
