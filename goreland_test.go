@@ -24,24 +24,24 @@ func AddTube(t1, t2 *Truck, cost float64) *Tube {
 }
 
 // Consider a world with Nodes (Trucks) and Edges (Tubes), Edges each having a cost
-// 
+//
 //    E
 //   /|
 //  / |
 // S--M
-// 
+//
 // S=Start at (0,0)
 // E=End at (1,1)
 // M=Middle at (0,1)
-// 
+//
 // S-M and M-E are clean clear tubes. cost: 1
-// 
+//
 // S-E is either:
-// 
+//
 // 1) TestGraphPath_ShortDiagonal : diagonal is a nice clean clear Tube , cost: 1.9
 //    Solver should traverse the bridge.
 //    Expect solution: Start, End  Total cost: 1.9
-// 
+//
 // 1) TestGraphPath_LongDiagonal : diagonal is a Tube plugged full of
 //    "enormous amounts of material"!, cost: 10000.
 //    Solver should avoid the plugged tube.

@@ -89,7 +89,10 @@ func (t *Tile) PathNeighbors() []Pather {
 // PathNeighborCost returns the movement cost of the directly neighboring tile.
 func (t *Tile) PathNeighborCost(to Pather) float64 {
 	toT := to.(*Tile)
-	return KindCosts[toT.Kind]
+
+	// from center of mountain tile, to center of plain tile, we
+	// walk across half a mountain tile and half a plain tile.
+	return (KindCosts[toT.Kind] + KindCosts[t.Kind]) / 2.0
 }
 
 // PathEstimatedCost uses Manhattan distance to estimate orthogonal distance
